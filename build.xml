@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<project default="main">
+
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="dist" location="dist" />
+	<property name="doc" location="doc" />
+	<property name="junit.home" location="/Applications/eclipse/plugins/org.junit_3.8.2.v200706111738/" />
+
+	<path id="compile.classpath">
+		<fileset dir="${junit.home}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="${build}" />
+	</path>
+
+	<target name="main" depends="clean, compile, dist" description="Main target">
+		<echo>
+            Building AntiXSS jar
+        </echo>
+	</target>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="compile" depends="init" description="Build Java classes">
+		<javac srcdir="src/com/gdssecurity/utils" destdir="${build}" source="1.4">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="dist" description="Create distribution Jar file">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}" />
+		<jar jarfile="${dist}/AntiXSS.jar" basedir="${build}" includes="com/gdssecurity/utils/AntiXSS.class" />
+	</target>
+
+	<target name="clean" description="Clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${doc}" />
+		<delete dir="bin" />
+	</target>
+
+	<target name="test" depends="compile" description="Run JUnit tests">
+		<junit errorProperty="test.failed" failureProperty="test.failed">
+			<classpath refid="compile.classpath" />
+			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
+			<test name="com.gdssecurity.utils.AntiXSSTest" />
+		</junit>
+		<fail message="Tests failed: check test reports." if="test.failed" />
+	</target>
+
+	<target name="javadoc" description="Generate Javadoc documentation">
+		<javadoc access="public" author="true" destdir="${doc}" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.4" sourcefiles="src/com/gdssecurity/utils/AntiXSS.java" sourcepath="src" splitindex="true" use="true" version="true">
+			<classpath refid="compile.classpath" />
+		</javadoc>
+	</target>
+
+</project>
