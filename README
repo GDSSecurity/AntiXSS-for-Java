@@ -1,0 +1,5 @@
+AntiXSS for Java is a port of the Microsoft Anti-Cross Site Scripting (AntiXSS) v1.5 library for .NET applications. The library requires Java 1.4 or higher, but has no other prerequisites.
+
+For those not familiar with the Microsoft AntiXSS library, it is an output encoding library for avoiding Cross Site Scripting vulnerabilities. Specifically it is intended to safely encode information written to the user's browser within a specific context (i.e. if writing a string into the HTML of a page, you need to use the correct function - HtmlEncode). Unlike some other solutions the library implements a white listing approach, and encodes everything except characters known to be harmless. For example, the string <script> will be HTML encoded as &#60;script&#62;.
+
+A description of the methods supported, and the encoding performed, can be found on the GDS Blog at http://www.gdssecurity.com/l/b/2007/12/29/antixss-for-java/
